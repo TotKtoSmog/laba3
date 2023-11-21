@@ -5,8 +5,90 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:laba3"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Лабораторная работа №3" Height="450" Width="1000" WindowStartupLocation="CenterScreen">
     <Grid>
-        
+        <TabControl Height="424">
+            <TabItem Header="Задание №1.1">
+                
+                <Grid Background="#FFE5E5E5">
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox x:Name="SearchEmployees" Width="157" Margin ="20,5" TextChanged="SearchEmployees_TextChanged" ></TextBox>
+                            <Button x:Name="Search" Width="100" Content="Найти" Height="19" Margin ="20,5" Click="Search_Click"></Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <DataGrid x:Name="EmployeesTable" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,5,0,0">
+                                <DataGrid.Columns >
+                                    <DataGridTextColumn Header="ФИО" Binding="{Binding FIO}"/>
+                                    <DataGridTextColumn Header="Год рождения" Binding="{Binding yearOfBirth}"/>
+                                    <DataGridTextColumn Header="Домашний адрес" Binding="{Binding address}"/>
+                                    <DataGridTextColumn Header="Телефон" Binding="{Binding phone}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <StackPanel x:Name="Report" Margin="10,0,0,0" Visibility="Visible">
+                                <StackPanel Orientation="Horizontal">
+                                    <Label> ФИО сотрудника: </Label>
+                                    <TextBox x:Name="FIO" IsReadOnly="True"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label>Год рождения: </Label>
+                                    <TextBox x:Name="yearOfBirth" IsReadOnly="True"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label>Домашний адрес:</Label>
+                                    <TextBox x:Name="address" IsReadOnly="True"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label>Телефон:</Label>
+                                    <TextBox x:Name="phone" IsReadOnly="True"/>
+                                </StackPanel>
+                                <Label>Сведения о работе</Label>
+                                <DataGrid  x:Name="JobsTable" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,5,0,0">
+                                    <DataGrid.Columns >
+                                        <DataGridTextColumn Header="Должность" Binding="{Binding name}"/>
+                                        <DataGridTextColumn Header="Дата начала" Binding="{Binding startDate}"/>
+                                        <DataGridTextColumn Header="Дата окончания" Binding="{Binding endDate}"/>
+                                        <DataGridTextColumn Header="Отдел" Binding="{Binding department}"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                                <StackPanel  Orientation="Horizontal" >
+                                    <Label VerticalAlignment="Center"> Зарплата</Label>
+                                    <DatePicker VerticalAlignment="Center" Margin="10,0,0,0" x:Name="SalaryDatePicker" SelectedDateChanged="SalaryDatePicker_SelectedDateChanged" ></DatePicker>
+                                    <Button Margin="10,0,0,0" VerticalAlignment="Center" x:Name="Clear" Content="Сбросить" Click="Clear_Click"></Button>
+                                </StackPanel>
+                                
+                                <DataGrid  x:Name="SalaryTable" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,5,0,0" FrozenColumnCount="3">
+                                   <DataGrid.Columns  >
+                                        <DataGridTextColumn Width="100" Header="Год" Binding="{Binding year}"/>
+                                        <DataGridTextColumn  Width="100" Header="Месяц" Binding="{Binding month}"/>
+                                        <DataGridTextColumn Width="100" Header="Размер" Binding="{Binding size}"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                            
+                            
+                        </StackPanel>
+                        
+                    </StackPanel>
+                    
+                </Grid>
+            </TabItem>
+            <TabItem Header="Задание №1.2">
+                <Grid Background="#FFE5E5E5">
+                    <DataGrid x:Name="DepartamentStatisticTable" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,5,0,0">
+                        <DataGrid.Columns >
+                            <DataGridTextColumn Header="Отдел" Binding="{Binding department}"/>
+                            <DataGridTextColumn Header="Должность" Binding="{Binding post}"/>
+                            <DataGridTextColumn Header="Количестов сотрудников" Binding="{Binding allCountEmployees}"/>
+                            <DataGridTextColumn Header="Количестов работующих сотрудников" Binding="{Binding countEmployees}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="TabItem">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            
+        </TabControl>
     </Grid>
 </Window>
