@@ -166,8 +166,22 @@
                     </StackPanel>
                 </StackPanel>
             </TabItem>
-            <TabItem Header="TabItem">
-                <Grid Background="#FFE5E5E5"/>
+            <TabItem Header="Задание №3">
+                <StackPanel Orientation="Horizontal">
+                    <lvc:CartesianChart LegendLocation="Bottom" Name="CartesianChart2" Width="732" />
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Дата начала: "/>
+                            <DatePicker x:Name="StartMetalDate" SelectedDateFormat="Short" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Дата конца: "/>
+                            <DatePicker x:Name="EndMetalDate" SelectedDateFormat="Short"/>
+                        </StackPanel>
+                        <Button Content="Построить график" Click="Button_Click_2"/>
+                    </StackPanel>
+                </StackPanel>
+                
             </TabItem>
 
         </TabControl>

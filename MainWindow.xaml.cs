@@ -10,6 +10,7 @@ using LiveCharts;
 using laba3.Task2;
 using System.Xml;
 using System.Windows.Media;
+using laba3.Task3;
 
 namespace laba3
 {
@@ -176,7 +177,6 @@ namespace laba3
 
             CartesianChart1.Series = CreateValuteChart(valCurs);
             CartesianChart1.AxisX.First().Labels = valCurs.Items.Select(n => n.date).ToList();
-            Console.WriteLine(1);
         }
         private SeriesCollection CreateValuteChart(ValCurs valCurs)
         {
@@ -191,6 +191,38 @@ namespace laba3
                 }
             };
             return s;
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            string startData = StartMetalDate.SelectedDate.Value.ToShortDateString().Replace('.', '/');
+            string endData = EndMetalDate.SelectedDate.Value.ToShortDateString().Replace('.', '/');
+            string Url = $"https://www.cbr.ru/scripts/xml_metall.asp?date_req1={startData}&date_req2={endData}";
+            getXmlMetall(Url);
+            
+        }
+        private SeriesCollection CreateValuteChart(Metall metall)
+        {
+            SeriesCollection s = new SeriesCollection();
+            for (int i = 1; i < 5; i++)
+            {
+                s.Add(new LineSeries()
+                {
+                    Title = $"Курс {metall.records.Where(n => n.code == i.ToString()).First().metallName}",
+                    Values = new ChartValues<double>(metall.records.Where(n => n.code == i.ToString()).Select(n => double.Parse(n.buy)))
+                });
+            }
+            return s;
+        }
+        private void getXmlMetall(string Url)
+        {
+
+            XmlReader reader = XmlReader.Create(Url);
+            XmlSerializer formatter = new XmlSerializer(typeof(Metall));
+            Metall metall;
+            metall = formatter.Deserialize(reader) as Metall;
+            CartesianChart2.Series = CreateValuteChart(metall);
+            CartesianChart2.AxisX.First().Labels = metall.records.Where(n => n.code == "1").Select(n => n.date).ToList();
         }
     }
 }

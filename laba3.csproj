@@ -67,8 +67,10 @@
     <Compile Include="Salary.cs" />
     <Compile Include="Task2\Item.cs" />
     <Compile Include="Task2\Record.cs" />
+    <Compile Include="Task3\RecordMetall.cs" />
     <Compile Include="Task2\ValCurs.cs" />
     <Compile Include="Task2\Valuta.cs" />
+    <Compile Include="Task3\Metall.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
