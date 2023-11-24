@@ -183,6 +183,22 @@
                 </StackPanel>
                 
             </TabItem>
+            <TabItem Header="Задание №4">
+                <StackPanel  Orientation="Horizontal">
+                    <DataGrid x:Name="SanatoriumsTable" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,5,0,0">
+                        <DataGrid.Columns >
+                            <DataGridTextColumn Width="100" Header="Название" Binding="{Binding name}"/>
+                            <DataGridTextColumn Width="100" Header="Регион" Binding="{Binding unit}"/>
+                            <DataGridTextColumn Width="100" Header="Старый адрес" Binding="{Binding legaladdress}"/>
+                            <DataGridTextColumn Width="100" Header="Актуальный адрес" Binding="{Binding actualaddress}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Margin="20,7">
+                        <ComboBox x:Name="SeletedRegion" SelectedIndex="0" Margin="0,0,0,20"/>
+                        <Button x:Name="SearchSanatoriums" Content="Найти" Click="SearchSanatoriums_Click"></Button>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
 
         </TabControl>
     </Grid>

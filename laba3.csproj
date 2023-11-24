@@ -61,9 +61,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="DepartmentStatistic.cs" />
-    <Compile Include="Job.cs" />
-    <Compile Include="Employee.cs" />
+    <Compile Include="Task1\DepartmentStatistic.cs" />
+    <Compile Include="Task1\Job.cs" />
+    <Compile Include="Task1\Employee.cs" />
     <Compile Include="Salary.cs" />
     <Compile Include="Task2\Item.cs" />
     <Compile Include="Task2\Record.cs" />
@@ -71,6 +71,8 @@
     <Compile Include="Task2\ValCurs.cs" />
     <Compile Include="Task2\Valuta.cs" />
     <Compile Include="Task3\Metall.cs" />
+    <Compile Include="Task4\RecordSanatorium.cs" />
+    <Compile Include="Task4\Sanatoriums.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -111,5 +113,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -7,10 +7,12 @@ using System.Xml.Serialization;
 using LiveCharts.Defaults;
 using LiveCharts.Wpf;
 using LiveCharts;
+using laba3.Task1;
 using laba3.Task2;
+using laba3.Task3;
 using System.Xml;
 using System.Windows.Media;
-using laba3.Task3;
+using laba3.Task4;
 
 namespace laba3
 {
@@ -21,6 +23,7 @@ namespace laba3
     {
         Employee[] employees;
         Valuta valuta;
+        Sanatoriums sanatoriums;
         List<DepartmentStatistic> departmentStatistics;
         public SeriesCollection DepartamentStatisticSeriesViews { get; set; }
         public MainWindow()
@@ -34,9 +37,8 @@ namespace laba3
             multiEmpl.ItemsSource = employees.Where(n => n.Jobs.Count( j => j.endDate == "") > 1);
             DepartmentList.ItemsSource = departmentStatistics.Where(n => n.countEmployees <= 3).Select(n => n.department);
             getMaxAceptAndDismissed();
-
-
             valuta = GetCurrencies();
+            getDataTask4();
             Console.WriteLine();
         }
         public Employee[] getEmpInfo()
@@ -223,6 +225,25 @@ namespace laba3
             metall = formatter.Deserialize(reader) as Metall;
             CartesianChart2.Series = CreateValuteChart(metall);
             CartesianChart2.AxisX.First().Labels = metall.records.Where(n => n.code == "1").Select(n => n.date).ToList();
+        }
+
+        
+        private void getDataTask4()
+        {
+            XmlSerializer formatter = new XmlSerializer(typeof(Sanatoriums));
+            
+            using (FileStream fs = new FileStream("C:\\Users\\Totkt\\Desktop\\data-20210603T1050-structure-20150929T0000.xml", FileMode.OpenOrCreate))
+            {
+                sanatoriums = formatter.Deserialize(fs) as Sanatoriums;
+            }
+            SanatoriumsTable.ItemsSource = sanatoriums.records;
+            SeletedRegion.ItemsSource = sanatoriums.records.Select(n => n.unit).OrderBy(n => n).Distinct().ToList();
+
+        }
+        private void SearchSanatoriums_Click(object sender, RoutedEventArgs e)
+        {
+            string unit = SeletedRegion.SelectedValue.ToString();
+            SanatoriumsTable.ItemsSource = sanatoriums.records.Where(n => n.unit == unit).ToList();
         }
     }
 }

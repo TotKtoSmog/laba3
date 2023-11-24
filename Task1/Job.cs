@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace laba3
+namespace laba3.Task1
 {
     [XmlRoot("Jobs")]
     public class Job

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Xml.Serialization;
 
-namespace laba3
+namespace laba3.Task1
 {
     [XmlRoot("Employee")]
     public class Employee

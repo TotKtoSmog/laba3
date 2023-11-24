@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace laba3
+namespace laba3.Task1
 {
     public class DepartmentStatistic
     {
