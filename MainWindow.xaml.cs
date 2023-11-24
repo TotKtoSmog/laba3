@@ -5,6 +5,9 @@ using System.Windows;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using System.Windows.Controls;
+using LiveCharts.Defaults;
+using LiveCharts.Wpf;
+using LiveCharts;
 
 namespace laba3
 {
@@ -15,12 +18,18 @@ namespace laba3
     {
         Employee[] employees;
         List<DepartmentStatistic> departmentStatistics;
+        public SeriesCollection DepartamentStatisticSeriesViews { get; set; }
         public MainWindow()
         {
             InitializeComponent();
             employees = getStudentInfo();
             FillDataGirdView(employees);
             departmentStatistics = FillingDepartmentStatistic(employees);
+            DepartamentStatisticSeriesViews = CreateDepartamentStatisticPieChart();
+            DataContext = this;
+            multiEmpl.ItemsSource = employees.Where(n => n.Jobs.Count( j => j.endDate == "") > 1);
+            DepartmentList.ItemsSource = departmentStatistics.Where(n => n.countEmployees <= 3).Select(n => n.department);
+            getMaxAceptAndDismissed();
             Console.WriteLine();
         }
         public Employee[] getStudentInfo()
@@ -86,6 +95,8 @@ namespace laba3
                 {
                     if(statistics.Where(n => n.department == job.department).Count() < 1)
                         statistics.Add(new DepartmentStatistic(job.department, job.name));
+                    else if (statistics.Where(n => n.post.Contains(job.name)).Count() == 0)
+                        statistics.Where(n => n.department == job.department).First().post.Add(job.name);
                     if (job.endDate == "")
                         statistics.Where(n => n.department == job.department).First().countEmployees++;
                     statistics.Where(n => n.department == job.department).First().allCountEmployees++;
@@ -95,5 +106,39 @@ namespace laba3
             return statistics;
             
         }
+
+        private SeriesCollection CreateDepartamentStatisticPieChart()
+        {
+            SeriesCollection s = new SeriesCollection();
+            for (int i = 0; i < departmentStatistics.Count; i++)
+            {
+                s.Add(new PieSeries
+                {
+                    Title = departmentStatistics[i].department,
+                    Values = new ChartValues<ObservableValue> { new ObservableValue(departmentStatistics[i].countEmployees) },
+                    DataLabels = true
+                });
+            }
+            return s;
+        }
+        
+        private List<Job> getAllJobs() 
+        {
+            List<Job> jTemp = new List<Job>();
+            foreach (List<Job> job in employees.Select(n => n.Jobs).ToList())
+            {
+                foreach (Job job2 in job)
+                    jTemp.Add(job2);
+            }
+            return jTemp;
+        }
+        private void getMaxAceptAndDismissed()
+        {
+            List<Job> jTemp = getAllJobs();
+            var a = jTemp.GroupBy(n => n.department).Select(g => new { department = g.Key, Acept = g.Select(n => n.startDate).Count(), dismissed = g.Where(n => n.endDate != "").Count() });
+            MaxAcept.Text = a.OrderByDescending(n => n.Acept).First().department;
+            MaxDismissed.Text = a.OrderByDescending(n => n.dismissed).First().department;
+        }
+
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http.Headers;
 using System.Xml.Serialization;
 
 namespace laba3
@@ -17,5 +19,6 @@ namespace laba3
 
         public List<Job> Jobs { get; set; }
         public List<Salary> Salarys { get; set; }
+
     }
 }

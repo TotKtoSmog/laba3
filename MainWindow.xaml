@@ -3,13 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:laba3"
+        xmlns:local="clr-namespace:laba3" 
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
         Title="Лабораторная работа №3" Height="450" Width="1000" WindowStartupLocation="CenterScreen">
     <Grid>
         <TabControl Height="424">
             <TabItem Header="Задание №1.1">
-                
+
                 <Grid Background="#FFE5E5E5">
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
@@ -27,11 +28,11 @@
                             </DataGrid>
                             <StackPanel x:Name="Report" Margin="10,0,0,0" Visibility="Visible">
                                 <StackPanel Orientation="Horizontal">
-                                    <Label> ФИО сотрудника: </Label>
+                                    <Label>ФИО сотрудника:</Label>
                                     <TextBox x:Name="FIO" IsReadOnly="True"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal">
-                                    <Label>Год рождения: </Label>
+                                    <Label>Год рождения:</Label>
                                     <TextBox x:Name="yearOfBirth" IsReadOnly="True"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal">
@@ -52,43 +53,106 @@
                                     </DataGrid.Columns>
                                 </DataGrid>
                                 <StackPanel  Orientation="Horizontal" >
-                                    <Label VerticalAlignment="Center"> Зарплата</Label>
+                                    <Label VerticalAlignment="Center">Зарплата</Label>
                                     <DatePicker VerticalAlignment="Center" Margin="10,0,0,0" x:Name="SalaryDatePicker" SelectedDateChanged="SalaryDatePicker_SelectedDateChanged" ></DatePicker>
                                     <Button Margin="10,0,0,0" VerticalAlignment="Center" x:Name="Clear" Content="Сбросить" Click="Clear_Click"></Button>
                                 </StackPanel>
-                                
+
                                 <DataGrid  x:Name="SalaryTable" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,5,0,0" FrozenColumnCount="3">
-                                   <DataGrid.Columns  >
+                                    <DataGrid.Columns  >
                                         <DataGridTextColumn Width="100" Header="Год" Binding="{Binding year}"/>
                                         <DataGridTextColumn  Width="100" Header="Месяц" Binding="{Binding month}"/>
                                         <DataGridTextColumn Width="100" Header="Размер" Binding="{Binding size}"/>
                                     </DataGrid.Columns>
                                 </DataGrid>
                             </StackPanel>
-                            
-                            
+
+
                         </StackPanel>
-                        
+
                     </StackPanel>
-                    
+
                 </Grid>
             </TabItem>
             <TabItem Header="Задание №1.2">
-                <Grid Background="#FFE5E5E5">
-                    <DataGrid x:Name="DepartamentStatisticTable" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,5,0,0">
-                        <DataGrid.Columns >
-                            <DataGridTextColumn Header="Отдел" Binding="{Binding department}"/>
-                            <DataGridTextColumn Header="Должность" Binding="{Binding post}"/>
-                            <DataGridTextColumn Header="Количестов сотрудников" Binding="{Binding allCountEmployees}"/>
-                            <DataGridTextColumn Header="Количестов работующих сотрудников" Binding="{Binding countEmployees}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
+                <StackPanel Orientation="Horizontal">
+                    <Grid Background="#FFE5E5E5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="52*"/>
+                            <ColumnDefinition Width="45*"/>
+                        </Grid.ColumnDefinitions>
+                        <DataGrid x:Name="DepartamentStatisticTable" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,5,0,0" Grid.ColumnSpan="2">
+                            <DataGrid.Columns >
+                                <DataGridTextColumn Header="Отдел" Binding="{Binding department}"/>
+                                <DataGridTemplateColumn Header="Должность">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ListBox IsEnabled="False" ItemsSource="{Binding Path=post}" SelectionMode="Extended"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTextColumn Header="Количестов сотрудников" Binding="{Binding allCountEmployees}"/>
+                                <DataGridTextColumn Header="Количестов работующих сотрудников" Binding="{Binding countEmployees}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                    <ScrollViewer>
+
+                        <StackPanel>
+                            <lvc:PieChart  Series="{Binding DepartamentStatisticSeriesViews}" LegendLocation="Bottom"  Name="DepartamentStatisticPie" Width="327" Height="309"/>
+                            
+
+
+                        </StackPanel>
+                    </ScrollViewer>
+
+
+
+                </StackPanel>
+
+            </TabItem>
+            <TabItem Header="Задание №1.3-1.5">
+                <StackPanel>
+                    <GroupBox Header="Сотрудники работующие в нескольких отделах" Margin="0,20,0,0">
+                        <ListBox x:Name="multiEmpl">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Path=FIO}" Margin="3"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </GroupBox>
+                    <GroupBox Header="Отделы где работают не более 3 сотрудников">
+                        <ListBox x:Name="DepartmentList" />
+                    </GroupBox>
+                    <GroupBox Header="Принято и уволено наибольшее кол-во сотрудников">
+                        <StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Наиболее всего принято в :"/>
+                                <TextBox x:Name="MaxAcept" IsEnabled="False"></TextBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Наиболее всего уволено в :"/>
+                                <TextBox x:Name="MaxDismissed" IsEnabled="False"></TextBox>
+                            </StackPanel>
+
+                        </StackPanel>
+                        
+                    </GroupBox>
+                </StackPanel>
+                
+            </TabItem>
+            <TabItem Header="Задание № 2">
+                <Grid Background="#FFE5E5E5"/>
             </TabItem>
             <TabItem Header="TabItem">
                 <Grid Background="#FFE5E5E5"/>
             </TabItem>
-            
+
         </TabControl>
     </Grid>
 </Window>
