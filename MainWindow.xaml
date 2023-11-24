@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:laba3" 
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
-        Title="Лабораторная работа №3" Height="450" Width="1000" WindowStartupLocation="CenterScreen">
+        Title="Лабораторная работа №3" Height="470" Width="1000" WindowStartupLocation="CenterScreen">
     <Grid>
         <TabControl Height="424">
             <TabItem Header="Задание №1.1">
@@ -146,8 +146,25 @@
                 </StackPanel>
                 
             </TabItem>
-            <TabItem Header="Задание № 2">
-                <Grid Background="#FFE5E5E5"/>
+            <TabItem Header="Задание № 2" Height="20" VerticalAlignment="Bottom">
+                <StackPanel Orientation="Horizontal">
+                    <lvc:CartesianChart LegendLocation="Bottom" Name="CartesianChart1" Width="732" />
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Валюта"/>
+                            <ComboBox x:Name="ValutaComboBox" SelectedIndex="0"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Дата начала: "/>
+                            <DatePicker x:Name="StartValutaDate" SelectedDateFormat="Short" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Дата конца: "/>
+                            <DatePicker x:Name="EndValutaDate" SelectedDateFormat="Short"/>
+                        </StackPanel>
+                        <Button Content="Построить график" Click="Button_Click"/>
+                    </StackPanel>
+                </StackPanel>
             </TabItem>
             <TabItem Header="TabItem">
                 <Grid Background="#FFE5E5E5"/>

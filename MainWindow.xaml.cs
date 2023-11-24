@@ -4,10 +4,12 @@ using System.Linq;
 using System.Windows;
 using System.Collections.Generic;
 using System.Xml.Serialization;
-using System.Windows.Controls;
 using LiveCharts.Defaults;
 using LiveCharts.Wpf;
 using LiveCharts;
+using laba3.Task2;
+using System.Xml;
+using System.Windows.Media;
 
 namespace laba3
 {
@@ -17,12 +19,13 @@ namespace laba3
     public partial class MainWindow : Window
     {
         Employee[] employees;
+        Valuta valuta;
         List<DepartmentStatistic> departmentStatistics;
         public SeriesCollection DepartamentStatisticSeriesViews { get; set; }
         public MainWindow()
         {
             InitializeComponent();
-            employees = getStudentInfo();
+            employees = getEmpInfo();
             FillDataGirdView(employees);
             departmentStatistics = FillingDepartmentStatistic(employees);
             DepartamentStatisticSeriesViews = CreateDepartamentStatisticPieChart();
@@ -30,9 +33,12 @@ namespace laba3
             multiEmpl.ItemsSource = employees.Where(n => n.Jobs.Count( j => j.endDate == "") > 1);
             DepartmentList.ItemsSource = departmentStatistics.Where(n => n.countEmployees <= 3).Select(n => n.department);
             getMaxAceptAndDismissed();
+
+
+            valuta = GetCurrencies();
             Console.WriteLine();
         }
-        public Employee[] getStudentInfo()
+        public Employee[] getEmpInfo()
         {
             XmlSerializer formatter = new XmlSerializer(typeof(Employee[]));
             Employee[] employees;
@@ -42,6 +48,7 @@ namespace laba3
             }
             return employees;
         }
+       
         public void FillDataGirdView(Employee[] employees)
         {
             EmployeesTable.ItemsSource = employees;
@@ -140,5 +147,50 @@ namespace laba3
             MaxDismissed.Text = a.OrderByDescending(n => n.dismissed).First().department;
         }
 
+        public Valuta GetCurrencies()
+        {
+            XmlSerializer formatter = new XmlSerializer(typeof(Valuta));
+            XmlReader reader = XmlReader.Create("http://www.cbr.ru/scripts/XML_val.asp?d=0");
+            Valuta valuta;
+            valuta = formatter.Deserialize(reader) as Valuta;
+            ValutaComboBox.ItemsSource = valuta.Items;
+            ValutaComboBox.DisplayMemberPath = "Name";
+            return valuta;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Item valuta = (Item)ValutaComboBox.SelectedItem;
+            string startData = StartValutaDate.SelectedDate.Value.ToShortDateString().Replace('.','/');
+            string endData = EndValutaDate.SelectedDate.Value.ToShortDateString().Replace('.', '/');
+            string Url = $"https://www.cbr.ru/scripts/XML_dynamic.asp?date_req1={startData}&date_req2={endData}&VAL_NM_RQ={valuta.ID}";
+            getXmlValute(Url);
+        }
+        private void getXmlValute(string Url)
+        {
+            
+            XmlReader reader = XmlReader.Create(Url);
+            XmlSerializer formatter = new XmlSerializer(typeof(ValCurs));
+            ValCurs valCurs;
+            valCurs = formatter.Deserialize(reader) as ValCurs;
+
+            CartesianChart1.Series = CreateValuteChart(valCurs);
+            CartesianChart1.AxisX.First().Labels = valCurs.Items.Select(n => n.date).ToList();
+            Console.WriteLine(1);
+        }
+        private SeriesCollection CreateValuteChart(ValCurs valCurs)
+        {
+            Item item = (Item)ValutaComboBox.SelectedItem;
+            SeriesCollection s = new SeriesCollection
+            {
+                new LineSeries()
+                {
+                    Title = $"Курс {item.Name}",
+                    Values = new ChartValues<double> ( valCurs.Items.Select(n => double.Parse(n.value)) ),
+                    Fill = new SolidColorBrush(Colors.Red),
+                }
+            };
+            return s;
+        }
     }
 }
